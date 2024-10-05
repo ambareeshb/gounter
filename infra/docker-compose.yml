@@ -1,0 +1,44 @@
+version: "3"
+services:
+  gounter-psql:
+    image: postgres:12.4-alpine
+    env_file: ./db/.env
+    ports:
+      - "5433:5432"
+    command: "-c log_statement=all"
+    volumes:
+      - ./db/postgres-data:/var/lib/postgresql/data:cached
+    networks:
+      - gounter-net
+
+  gounter-migrate:
+    build:
+      context: ./db
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      MIGRATIONS_PATH: /migrations
+    volumes:
+      - ./db:/db:cached
+    entrypoint: ""
+    command: ["sh", "/db/migrate.sh"]
+    depends_on:
+      - gounter-psql
+    restart: on-failure
+    networks:
+      - gounter-net
+
+  gounter:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - gounter-psql
+      - gounter-migrate
+    networks:
+      - gounter-net
+
+networks:
+  gounter-net:
