@@ -15,8 +15,11 @@ services:
     build:
       context: ./db
     environment:
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: gounter-psql
       POSTGRES_PORT: 5432
+      POSTGRES_DB: gounter
+      PGPASSWORD: test
+      POSTGRES_USER: test
       MIGRATIONS_PATH: /migrations
     volumes:
       - ./db:/db:cached
@@ -32,11 +35,13 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile
+    env_file: ./.env
     ports:
       - "8081:8081"
     depends_on:
       - gounter-psql
       - gounter-migrate
+    entrypoint: ["sh", "-c", "until nc -z gounter-psql 5432; do echo waiting for postgres; sleep 2; done; ./gounter"]
     networks:
       - gounter-net
 
