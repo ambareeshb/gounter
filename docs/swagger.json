@@ -1,0 +1,138 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Counter API",
+    "description": "API for managing counters",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081"
+    }
+  ],
+  "paths": {
+    "/counter/create": {
+      "post": {
+        "summary": "Create a new counter",
+        "operationId": "createCounter",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "testCounter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Counter created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid-generated-id"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "testCounter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/counter/increment": {
+      "post": {
+        "summary": "Increment the specified counter",
+        "operationId": "incrementCounter",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "uuid-generated-id"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Counter incremented successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid-generated-id"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "testCounter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/counter/delete": {
+      "delete": {
+        "summary": "Delete the specified counter",
+        "operationId": "deleteCounter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "ID of the counter to delete",
+            "schema": {
+              "type": "string",
+              "example": "uuid-generated-id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Counter deleted successfully"
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "404": {
+            "description": "Counter not found"
+          }
+        }
+      }
+    }
+  }
+}

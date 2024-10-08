@@ -14,8 +14,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Counter Sample !!")
-
 	config, err := LoadConfig()
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)
