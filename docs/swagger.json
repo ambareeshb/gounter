@@ -31,6 +31,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authorization",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Counter created successfully",
@@ -54,6 +65,9 @@
           },
           "400": {
             "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
           }
         }
       }
@@ -76,31 +90,45 @@
                 }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Counter incremented successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "example": "uuid-generated-id"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "testCounter"
+          },
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "description": "Bearer token for authorization",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Counter incremented successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "uuid-generated-id"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "testCounter"
+                      }
                     }
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "401": {
+              "description": "Unauthorized - Invalid or missing token"
             }
-          },
-          "400": {
-            "description": "Invalid input"
           }
         }
       }
@@ -119,6 +147,15 @@
               "type": "string",
               "example": "uuid-generated-id"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authorization",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -130,6 +167,9 @@
           },
           "404": {
             "description": "Counter not found"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
           }
         }
       }

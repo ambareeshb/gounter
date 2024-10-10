@@ -33,23 +33,35 @@ make run
 
 Then the app is available at `localhost:8081`
 
+On start up the application will create a JWT Token which is valid for 5 minutes which can be passed as Bearer token for all requests.On every request we are validating the structure and expiry of the token. 
+You can also use any valid JWT token, we are creating during startup for convenience.
+
+![startup](./docs/images/application_start.png)
+
 Check the file at `test/integration/integration_test.go`, Which contains some basic cURL commands. Or to test quickly:
 ### Create counter
 
 ```bash
-curl -X POST -k http://localhost:8081/counter/create -d '{"name":"counter name"}'
+curl -X POST -k http://localhost:8081/counter/create \
+                  -H "Authorization: Bearer <token>" \
+                  -H "Content-Type: application/json" \
+                  -d '{"name":"counter name"}'
 ```
 
 ### Increment counter
 
 ```bash
-curl -X POST -k http://localhost:8081/counter/increment -d '{"id":"valid id from the previous creation step"}'
+curl -X POST -k http://localhost:8081/counter/increment \
+                  -H "Authorization: Bearer <token>" \
+                  -H "Content-Type: application/json" \
+                  -d '{"id":"valid id from the previous creation step"}'
 ```
 
 ### Delete counter
 
 ```bash
-curl -X DELETE  "http://localhost:8081/counter/delete?id=<valid_id_from_first_step>"
+curl -X DELETE "http://localhost:8081/counter/delete?id=<valid_id_from_first_step>" \
+                  -H "Authorization: Bearer <token>" 
 ```
 
 

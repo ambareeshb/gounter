@@ -6,6 +6,7 @@ import (
 	"gounter/api/route"
 	"gounter/internal/repository"
 	"gounter/internal/service"
+	"gounter/util"
 	"log"
 	"net/http"
 
@@ -14,6 +15,12 @@ import (
 )
 
 func main() {
+	token, err := util.GenerateValidJWT()
+	if err != nil {
+		log.Fatalf("Error generating JWT token: %v", err)
+	}
+	fmt.Println("Generated JWT token (valid for 5 minutes): ", token)
+
 	config, err := LoadConfig()
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)

@@ -22,9 +22,8 @@ const (
 		RETURNING id, name, value;`
 
 	SoftDeleteCounter = `
-		UPDATE counter 
-		SET deleted_at = $1 
-		WHERE id = $2 AND deleted_at IS NULL;`
+		DELETE FROM counter 
+		WHERE id = $1;`
 )
 
 // CounterRepository defines the interface for counter operations
@@ -72,12 +71,10 @@ func (r *Counter) IncrementCounter(ctx context.Context, id uuid.UUID) (*model.Co
 	return &counter, nil
 }
 
-// SoftDeleteCounter marks the counter as deleted by setting the deleted_at timestamp.
+// SoftDeleteCounter will hard delete the counter.
 // It returns the number of rows affected.
 func (r *Counter) SoftDeleteCounter(ctx context.Context, id uuid.UUID) (int64, error) {
-	now := time.Now().UTC()
-
-	result, err := r.db.ExecContext(ctx, SoftDeleteCounter, now, id)
+	result, err := r.db.ExecContext(ctx, SoftDeleteCounter, id)
 	if err != nil {
 		return 0, err
 	}
