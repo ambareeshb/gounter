@@ -1,6 +1,7 @@
 package route
 
 import (
+	"gounter/api/auth"
 	"gounter/api/handler"
 	"net/http"
 )
@@ -10,9 +11,9 @@ func InitRoutes(handler *handler.Handler) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	// Define routes for create, update, and delete
-	mux.HandleFunc("/counter/create", handler.CreateCounter)
-	mux.HandleFunc("/counter/increment", handler.IncrementCounter)
-	mux.HandleFunc("/counter/delete", handler.DeleteCounter)
+	mux.Handle("/counter/create", auth.AuthorizationMiddleware(http.HandlerFunc(handler.CreateCounter)))
+	mux.Handle("/counter/increment", auth.AuthorizationMiddleware(http.HandlerFunc(handler.IncrementCounter)))
+	mux.Handle("/counter/delete", auth.AuthorizationMiddleware(http.HandlerFunc(handler.DeleteCounter)))
 
 	return mux
 }

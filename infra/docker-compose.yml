@@ -34,7 +34,7 @@ services:
   gounter:
     build:
       context: ../
-      dockerfile: Dockerfile
+      dockerfile: ./infra/Dockerfile
     env_file: ./.env
     ports:
       - "8081:8081"
@@ -44,17 +44,6 @@ services:
     entrypoint: ["sh", "-c", "until nc -z gounter-psql 5432; do echo waiting for postgres; sleep 2; done; ./gounter"]
     networks:
       - gounter-net
-
-  swagger-ui:
-    build:
-      context: ../
-    image: swaggerapi/swagger-ui
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./docs/swagger.yaml:/usr/share/nginx/html/swagger.yaml
-    environment:
-      - SWAGGER_JSON=/usr/share/nginx/html/swagger.yaml
 
 networks:
   gounter-net:

@@ -168,8 +168,8 @@ func TestRepositorySoftDeleteCounter(t *testing.T) {
 			name: "successfully soft deletes counter",
 			setupMock: func(mock sqlmock.Sqlmock, id uuid.UUID) {
 				// Mock the update and return 1 row affected
-				mock.ExpectExec(`UPDATE counter SET deleted_at = \$1 WHERE id = \$2 AND deleted_at IS NULL;`).
-					WithArgs(sqlmock.AnyArg(), id).
+				mock.ExpectExec(`DELETE FROM counter WHERE id = \$1;`).
+					WithArgs(id).
 					WillReturnResult(sqlmock.NewResult(1, 1)) // 1 row affected
 			},
 			id:               uuid.New(),
@@ -180,8 +180,8 @@ func TestRepositorySoftDeleteCounter(t *testing.T) {
 			name: "counter not found",
 			setupMock: func(mock sqlmock.Sqlmock, id uuid.UUID) {
 				// Mock the update but return 0 rows affected (no such counter)
-				mock.ExpectExec(`UPDATE counter SET deleted_at = \$1 WHERE id = \$2 AND deleted_at IS NULL;`).
-					WithArgs(sqlmock.AnyArg(), id).
+				mock.ExpectExec(`DELETE FROM counter WHERE id = \$1;`).
+					WithArgs(id).
 					WillReturnResult(sqlmock.NewResult(1, 0)) // 0 rows affected
 			},
 			id:               uuid.New(),
@@ -192,8 +192,8 @@ func TestRepositorySoftDeleteCounter(t *testing.T) {
 			name: "counter already deleted",
 			setupMock: func(mock sqlmock.Sqlmock, id uuid.UUID) {
 				// Mock the update but return 0 rows affected (already deleted)
-				mock.ExpectExec(`UPDATE counter SET deleted_at = \$1 WHERE id = \$2 AND deleted_at IS NULL;`).
-					WithArgs(sqlmock.AnyArg(), id).
+				mock.ExpectExec(`DELETE FROM counter WHERE id = \$1;`).
+					WithArgs(id).
 					WillReturnResult(sqlmock.NewResult(1, 0)) // 0 rows affected
 			},
 			id:               uuid.New(),
@@ -204,8 +204,8 @@ func TestRepositorySoftDeleteCounter(t *testing.T) {
 			name: "database error during update",
 			setupMock: func(mock sqlmock.Sqlmock, id uuid.UUID) {
 				// Mock a database error
-				mock.ExpectExec(`UPDATE counter SET deleted_at = \$1 WHERE id = \$2 AND deleted_at IS NULL;`).
-					WithArgs(sqlmock.AnyArg(), id).
+				mock.ExpectExec(`DELETE FROM counter WHERE id = \$1;`).
+					WithArgs(id).
 					WillReturnError(sql.ErrConnDone)
 			},
 			id:               uuid.New(),

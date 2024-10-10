@@ -51,10 +51,12 @@ clean:
 create-migration:
 	migrate create  -dir infra/db/migrations/ -ext sql ${name}
 
-# serve swagger documentation at 8080 port
+# Serve swagger documentation at 8080 port
 serve-swagger:
-	docker-compose -f ./docs/docker-compose.yml up -d  --build
+	docker-compose -f ./infra/docker-compose-doc.yml up -d 
 	@open http://localhost:8080 || xdg-open http://localhost:8080 || start http://localhost:8080
+
+jwt: 
 
 # Phony targets
 .PHONY: build run test clean
